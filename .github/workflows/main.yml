@@ -15,6 +15,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           directories: "src"
           ignore_below: 5
-          file_extensions: "c, cpp"
+          file_extensions: "cs, cpp"
           warn_above: 15
           fail_above: 60
