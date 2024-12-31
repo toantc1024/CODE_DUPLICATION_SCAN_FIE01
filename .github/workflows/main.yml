@@ -1,28 +1,20 @@
-            - name: Duplicate code detection tool
-  # You may pin to the exact commit or the version.
-  # uses: platisd/duplicate-code-detection-tool@f0413b1571a98b653f617a59fec0097001e18c0e
-  uses: platisd/duplicate-code-detection-tool@v1.2.0
-  with:
-    # The GitHub token
-    github_token: 
-    # A comma-separated list of the directories containing the source code
-    directories: 
-    # A comma-separated list of directories that should be ignored
-    ignore_directories: # optional, default is 
-    # The relative path to filter out when reporting results
-    project_root_dir: # optional, default is ./
-    # A comma-separated list of source code file extensions to check for similarities
-    file_extensions: # optional, default is h, hpp, c, cpp, cc, java, py, cs
-    # The minimum similarity percentage to be reported
-    ignore_below: # optional, default is 10
-    # The maximum allowed similarity percentage before the action fails
-    fail_above: # optional, default is 100
-    # The maximum allowed similarity percentage before the action warns
-    warn_above: # optional, default is 100
-    # Removes comments and docstrings from the source code before analysis
-    only_code: # optional
-    # Duplication report will be left as a single comment, which will be updated, instead of multiple ones
-    one_comment: # optional
-    # The message to be displayed at the start of the duplication report. It is used by the bot to identify previous reports and update them, so it must be unique. If you want to use the Action in multiple steps of the same workflow, then you can change this message in each step to avoid conflicts
-    header_message_start: # optional, default is ## 📌 Duplicate code detection tool report
-          
+name: Duplicate code
+
+on: issue_comment
+
+jobs:
+  duplicate-code-check:
+    name: Check for duplicate code
+    # Trigger the tool only when a comment containing the keyword is published in a pull request
+    if: github.event.issue.pull_request && contains(github.event.comment.body, 'run_duplicate_code_detection_tool')
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check for duplicate code
+        uses: platisd/duplicate-code-detection-tool@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directories: "src"
+          ignore_below: 5
+          file_extensions: "cs, cpp"
+          warn_above: 15
+          fail_above: 60
