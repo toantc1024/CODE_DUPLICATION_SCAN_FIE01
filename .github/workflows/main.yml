@@ -16,5 +16,5 @@ jobs:
           directories: "src"
           ignore_below: 40
           file_extensions: "cs, cpp"
-          warn_above: 15
-          fail_above: 60
+          warn_above: 20
+          fail_above: 50
